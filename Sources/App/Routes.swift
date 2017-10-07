@@ -2,6 +2,7 @@ import Vapor
 
 final class Routes: RouteCollection {
     let view: ViewRenderer
+    let login = LoginController()
     init(_ view: ViewRenderer) {
         self.view = view
     }
@@ -10,6 +11,11 @@ final class Routes: RouteCollection {
         /// GET /
         builder.get { req in
             return try self.view.make("welcome")
+        }
+        
+        /// GET /login/
+        builder.get("login") { req in
+            return try self.login.getTest()
         }
 
         /// GET /hello/...

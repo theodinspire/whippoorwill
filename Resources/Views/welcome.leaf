@@ -4,7 +4,6 @@
 
 #export("content") {
 	<div class="welcome">
-		<img src="/images/it-works.png">
+		<a href="/login"><img src="/images/twitter-login.png" alt="Sign in with Twitter"></a>
 	</div>
 }
-
