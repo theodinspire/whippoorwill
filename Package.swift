@@ -9,6 +9,7 @@ let package = Package(
     dependencies: [
         .Package(url: "https://github.com/vapor/vapor.git", majorVersion: 2, minor: 2),
         .Package(url: "https://github.com/vapor/leaf-provider.git", majorVersion: 1),
+        .Package(url: "https://github.com/IBM-Swift/BlueCryptor.git", majorVersion: 0, minor: 8),
     ],
     exclude: [
         "Config",

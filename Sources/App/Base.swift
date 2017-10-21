@@ -8,15 +8,15 @@
 import Vapor
 
 final class Base {
-    private static var droplet: Droplet?
+    private static var drop: Droplet?
     
-    static var drop: Droplet? {
+    static var droplet: Droplet? {
         get {
-            return droplet
+            return drop
         }
         set(newValue) {
-            guard droplet == nil else { return }
-            droplet = newValue
+            guard drop == nil else { return }
+            drop = newValue
         }
     }
 }
