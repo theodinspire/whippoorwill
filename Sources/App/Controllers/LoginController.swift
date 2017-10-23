@@ -13,10 +13,10 @@ final class LoginController {
     
     private static func getToken() throws -> String {
         let request = Request(method: .post, uri: "https://api.twitter.com/oauth/request_token")
-    
-        
-    
-        request.headers["Authorization"] = ""
+        try request.setOAuth1Header(including: [
+            "oauth_callback"          : //Whatever the callback would be?,
+                "http%3A%2F%2Flocalhost%2Fsign-in-with-twitter%2F", //  Sign-in
+            ])
     
         return request.description
     }
