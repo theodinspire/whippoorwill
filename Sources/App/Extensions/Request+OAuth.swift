@@ -71,32 +71,26 @@ extension Request {
 //        print(headers["Authentication"] ?? "No authentication header")
     }
     
-    var queryDict: [String: String] {
-//        guard let ary = uri.query?.components(separatedBy: "&") else { return [:] }
-        var queries = [String: String]()
-        
-//        for item in ary {
-//            let pair = item.components(separatedBy: "=")
-//            guard pair.count == 2 else { continue }
-//            queries[pair[0]] = pair[1]
-//        }
-        
-        return queries
-    }
-    
-    func baseOAuthParameters(including items: [String: NodeRepresentable] = [:]) throws -> [String: NodeRepresentable] {
+    func baseOAuthParameters(including items: [String: String] = [:]) throws -> [String: String] {
         guard let key = ProcessInfo.processInfo.environment["CONSUMERKEY"] else {
             throw Abort.serverError
         }
         
-        let base: [String: NodeRepresentable] = [
+        return [
             "oauth_consumer_key" : key,
             "oauth_nonce" : try Random.makeNonce(),
             "oauth_signature_method" : "HMAC-SHA1",
             "oauth_version" : "1.0",
             "oauth_timestamp" : Date().timeIntervalSince1970.asTimestamp,
-        ]
-        
-        return base.merging(items, uniquingKeysWith: { $1 })
+            ].merging(items, uniquingKeysWith: { $1 })
+    }
+    
+    var queryDictionary: [String: String] {
+        guard let query = uri.query else { return [:] }
+        return query.components(separatedBy: "&").reduce([:]) { (dict: [String: String], pair: String) -> [String: String] in
+            let items = pair.components(separatedBy: "=")
+            guard items.count >= 2 else { return dict }
+            return dict.merging([items[0]: items[1]], uniquingKeysWith: { $1 })
+        }
     }
 }

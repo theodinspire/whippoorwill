@@ -23,6 +23,7 @@ class Request_OAuthTests: XCTestCase {
         super.tearDown()
     }
     
+    //  func baseOAuthParamters(including:) -> [String: String]
     func testBaseOAuthParametersHaveBaseItems() {
         do {
             let baseDictionary = try Request(method: .get, uri: "https://api.twitter.com").baseOAuthParameters()
@@ -40,9 +41,7 @@ class Request_OAuthTests: XCTestCase {
     func testBaseOAuthParametersHaveConsumerKey() {
         do {
             let baseDictionary = try Request(method: .get, uri: "https://api.twitter.com").baseOAuthParameters()
-            guard let envKey = ProcessInfo.processInfo.environment["CONSUMERKEY"], let oauthKey = baseDictionary["oauth_consumer_key"] as? String else {
-                throw Abort.serverError
-            }
+            guard let envKey = ProcessInfo.processInfo.environment["CONSUMERKEY"], let oauthKey = baseDictionary["oauth_consumer_key"] else { throw Abort.serverError }
             
             XCTAssertEqual(envKey, oauthKey)
         } catch {
@@ -53,7 +52,7 @@ class Request_OAuthTests: XCTestCase {
     func testBaseOAuthParamatersSignatureMethodIsHMACSHA1() {
         do {
             let baseDictionary = try Request(method: .get, uri: "http://api.twitter.com").baseOAuthParameters()
-            guard let signatureMethod = baseDictionary["oauth_signature_method"] as? String else { throw Abort.serverError }
+            guard let signatureMethod = baseDictionary["oauth_signature_method"] else { throw Abort.serverError }
             
             XCTAssertEqual("HMAC-SHA1", signatureMethod)
         } catch {
@@ -64,7 +63,7 @@ class Request_OAuthTests: XCTestCase {
     func testBaseOAuthParametersOAuthVersionIs1() {
         do {
             let baseDictionary = try Request(method: .get, uri: "http://api.twitter.com").baseOAuthParameters()
-            guard let signatureMethod = baseDictionary["oauth_version"] as? String else { throw Abort.serverError }
+            guard let signatureMethod = baseDictionary["oauth_version"] else { throw Abort.serverError }
             
             XCTAssertEqual("1.0", signatureMethod)
         } catch {
@@ -74,14 +73,14 @@ class Request_OAuthTests: XCTestCase {
     
     func testBaseOAuthParametersTimestampIsCurrent() {
         do {
-            let earlier = Date().timeIntervalSince1970.asTimestamp
+            let earlier = trunc(Date().timeIntervalSince1970)
             let baseDictionary = try Request(method: .get, uri: "http://api.twitter.com").baseOAuthParameters()
-            let later = Date().timeIntervalSince1970.asTimestamp
+            let later = trunc(Date().timeIntervalSince1970)
             
-            guard let timestamp = baseDictionary["oauth_timestamp"] as? String else { throw Abort.serverError }
+            guard let timestamp = baseDictionary["oauth_timestamp"], let time = TimeInterval(timestamp) else { throw Abort.serverError }
             
-            XCTAssertLessThanOrEqual(earlier, timestamp)
-            XCTAssertLessThanOrEqual(timestamp, later)
+            XCTAssertLessThanOrEqual(earlier, time)
+            XCTAssertLessThanOrEqual(time, later)
         } catch {
             XCTFail()
         }
@@ -91,7 +90,7 @@ class Request_OAuthTests: XCTestCase {
         do {
             let replacement = "🌙🐉🏉💫"
             let baseDictionary = try Request(method: .get, uri: "http://api.twitter.com").baseOAuthParameters(including: ["oauth_nonce": replacement])
-            guard let nonce = baseDictionary["oauth_nonce"] as? String else { throw Abort.serverError }
+            guard let nonce = baseDictionary["oauth_nonce"] else { throw Abort.serverError }
             
             XCTAssertEqual(replacement, nonce)
         } catch {
@@ -99,11 +98,19 @@ class Request_OAuthTests: XCTestCase {
         }
     }
 
-//    func testPerformanceExample() {
-//        // This is an example of a performance test case.
-//        self.measure {
-//            // Put the code you want to measure the time of here.
-//        }
-//    }
-
+    //  var queryDictionary: [String: String]
+    func testQueryDictionaryQuerylessURLMakesEmptyDictionary() {
+        let request = Request(method: .post, uri: "https://api.twitter.com/oauth/request_token")
+        XCTAssertTrue(request.queryDictionary.isEmpty)
+    }
+    
+    func testQueryDictionaryURLWithQueriesProducesDictionary() {
+        let url = "https://api.twitter.com/oauth/authenticate"
+        let key = "oauth_token"
+        let value = "NPcudxy0yU5T3tBzho7iCotZ3cnetKwcTIRlX0iwRl0"
+        
+        let request = Request(method: .get, uri: "\(url)?\(key)=\(value)")
+        
+        XCTAssertEqual(request.queryDictionary[key], value)
+    }
 }
