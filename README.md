@@ -1,20 +1,4 @@
-<p align="center">
-    <img src="https://cloud.githubusercontent.com/assets/1977704/25426816/a9d40530-2a70-11e7-9758-8a0da6341035.png" width="320" alt="Web Template">
-    <br>
-    <br>
-    <a href="https://docs.vapor.codes/2.0/getting-started/toolbox/#templates">
-        <img src="http://img.shields.io/badge/read_the-docs-92A8D1.svg" alt="Documentation">
-    </a>
-    <a href="http://vapor.team">
-        <img src="http://vapor.team/badge.svg" alt="Slack Team">
-    </a>
-    <a href="LICENSE">
-        <img src="http://img.shields.io/badge/license-MIT-brightgreen.svg" alt="MIT License">
-    </a>
-    <a href="https://circleci.com/gh/vapor/web-template">
-        <img src="https://circleci.com/gh/vapor/web-template.svg?style=shield" alt="Continuous Integration">
-    </a>
-    <a href="https://swift.org">
-        <img src="http://img.shields.io/badge/swift-3.1-brightgreen.svg" alt="Swift 3.1">
-    </a>
-</p>
+# Whippoorwill
+
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">APP IDEA: Twitter but only pulls data between 10pm and 3am when everyone’s got those lucid tweets.</p>&mdash; Jamie Sanchez (@spacedragon) <a href="https://twitter.com/spacedragon/status/867981677703725056?ref_src=twsrc%5Etfw">May 26, 2017</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
