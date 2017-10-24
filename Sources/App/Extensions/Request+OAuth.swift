@@ -93,4 +93,9 @@ extension Request {
             return dict.merging([items[0]: items[1]], uniquingKeysWith: { $1 })
         }
     }
+    
+    var bodyDictionary: [String: String] {
+        
+        return [:]
+    }
 }
