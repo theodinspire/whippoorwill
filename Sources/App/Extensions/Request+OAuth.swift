@@ -95,7 +95,12 @@ extension Request {
     }
     
     var bodyDictionary: [String: String] {
+        guard let bytes = body.bytes else { return [:] }
         
-        return [:]
+        return String.init(bytes: bytes).components(separatedBy: "&").reduce([:]) { (dict: [String: String], pair: String) -> [String: String] in
+            let items = pair.components(separatedBy: "=")
+            guard items.count >= 2 else { return dict }
+            return dict.merging([items[0]: items[1]], uniquingKeysWith: { $1 })
+        }
     }
 }

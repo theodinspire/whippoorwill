@@ -113,4 +113,12 @@ class Request_OAuthTests: XCTestCase {
         
         XCTAssertEqual(request.queryDictionary[key], value)
     }
+    
+    //  var bodyDictionary: [String: String]
+    func testBodyDictionaryDictionaryHasKeysAndValuesForBodyContent() {
+        let request = Request(method: .post, uri: "https://api.twitter.com/oauth/request_token")
+        request.body = "status=Hello%20Ladies%20%2b%20Gentlemen%2c%20a%20signed%20OAuth%20request%21".makeBody()
+        
+        XCTAssertEqual(request.bodyDictionary.count, 1)
+    }
 }
